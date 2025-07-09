@@ -868,7 +868,7 @@ id,bidirectional_packets,bidirectional_bytes,application_name,application_catego
 866,1,58,Unknown,Unspecified,0,0
 867,1,58,Unknown,Unspecified,0,0
 868,1,58,Unknown,Unspecified,0,0
-869,1,58,Starcraft,Game,1,1
+869,1,58,Blizzard,Game,1,1
 870,1,58,Unknown,Unspecified,0,0
 871,1,58,Unknown,Unspecified,0,0
 872,1,58,Unknown,Unspecified,0,0
@@ -933,7 +933,7 @@ id,bidirectional_packets,bidirectional_bytes,application_name,application_catego
 931,1,58,Unknown,Unspecified,0,0
 932,1,58,Unknown,Unspecified,0,0
 933,1,58,Unknown,Unspecified,0,0
-934,1,58,Starcraft,Game,1,1
+934,1,58,Blizzard,Game,1,1
 935,1,58,Unknown,Unspecified,0,0
 936,1,58,Unknown,Unspecified,0,0
 937,1,58,Unknown,Unspecified,0,0

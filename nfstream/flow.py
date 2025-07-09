@@ -202,9 +202,8 @@ class NFlow(object):
         "application_is_guessed",
         "application_confidence",
         "requested_server_name",
-        "ja3_client_fingerprint",
-        "ja4_client_fingerprint",
-        "ja3_server_fingerprint",
+        "ja4c_fingerprint",
+        "ja3s_fingerprint",
         "user_agent",
         "content_type",
         "_C",
@@ -330,13 +329,10 @@ class NFlow(object):
                 self.requested_server_name = ffi.string(
                     self._C.requested_server_name
                 ).decode("utf-8", errors="ignore")
-                self.ja3_client_fingerprint = ffi.string(self._C.c_hash).decode(
+                self.ja4c_fingerprint = ffi.string(self._C.ja4c).decode(
                     "utf-8", errors="ignore"
                 )
-                self.ja4_client_fingerprint = ffi.string(self._C.ja4_client).decode(
-                    "utf-8", errors="ignore"
-                )
-                self.ja3_server_fingerprint = ffi.string(self._C.s_hash).decode(
+                self.ja3s_fingerprint = ffi.string(self._C.ja3s).decode(
                     "utf-8", errors="ignore"
                 )
                 self.user_agent = ffi.string(self._C.user_agent).decode(
@@ -351,9 +347,9 @@ class NFlow(object):
                 self.application_is_guessed = None
                 self.application_confidence = None
                 self.requested_server_name = None
-                self.ja3_client_fingerprint = None
-                self.ja4_client_fingerprint = None
-                self.ja3_server_fingerprint = None
+                # JA3C removed in nDPI 4.14 = None
+                self.ja4c_fingerprint = None
+                self.ja3s_fingerprint = None
                 self.user_agent = None
                 self.content_type = None
         if splt:  # If splt_analysis set (>0), we unpack the arrays structures.
@@ -533,13 +529,10 @@ class NFlow(object):
                 self.requested_server_name = ffi.string(
                     self._C.requested_server_name
                 ).decode("utf-8", errors="ignore")
-                self.ja3_client_fingerprint = ffi.string(self._C.c_hash).decode(
+                self.ja4c_fingerprint = ffi.string(self._C.ja4c).decode(
                     "utf-8", errors="ignore"
                 )
-                self.ja4_client_fingerprint = ffi.string(self._C.ja4_client).decode(
-                    "utf-8", errors="ignore"
-                )
-                self.ja3_server_fingerprint = ffi.string(self._C.s_hash).decode(
+                self.ja3s_fingerprint = ffi.string(self._C.ja3s).decode(
                     "utf-8", errors="ignore"
                 )
                 self.user_agent = ffi.string(self._C.user_agent).decode(

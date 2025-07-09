@@ -1,7 +1,7 @@
 id,bidirectional_packets,bidirectional_bytes,application_name,application_category_name,application_is_guessed,application_confidence
 0,58,9345,Viber,VoIP,1,1
 1,2,281,DNS.Facebook,Network,0,6
-2,2,377,DNS,Network,0,6
+2,2,377,DNS.ADS_Analytic_Track,Network,0,6
 3,2,451,DNS,Network,0,6
 4,22,7849,TLS,Web,0,6
 5,22,7625,TLS,Web,0,6

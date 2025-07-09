@@ -162,6 +162,7 @@ typedef struct nf_flow {
   char category_name[40];
   char requested_server_name[80];
   char c_hash[48];
+  char ja4_client[48];
   char s_hash[48];
   char content_type[64];
   char user_agent[256];
@@ -873,7 +874,7 @@ static uint16_t flow_get_packet_size(struct nf_packet *packet, uint8_t accountin
  * flow_is_ndpi_proto: helper to check is flow protocol equal to an id.
  */
 static uint8_t flow_is_ndpi_proto(struct nf_flow *flow, uint16_t id) {
-  if ((flow->detected_protocol.master_protocol == id)|| (flow->detected_protocol.app_protocol == id)) return 1;
+  if ((flow->detected_protocol.proto.master_protocol == id)|| (flow->detected_protocol.proto.app_protocol == id)) return 1;
   else return 0;
 }
 
@@ -915,6 +916,7 @@ static void flow_bidirectional_dissection_collect_info(struct ndpi_detection_mod
     memcpy(flow->requested_server_name, flow->ndpi_flow->host_server_name, sizeof(flow->requested_server_name));
     ndpi_snprintf(flow->user_agent, sizeof(flow->user_agent), "%s", (flow->ndpi_flow->http.user_agent ? flow->ndpi_flow->http.user_agent : ""));
     memcpy(flow->c_hash, flow->ndpi_flow->protos.tls_quic.ja3_client, sizeof(flow->c_hash));
+    memcpy(flow->ja4_client, flow->ndpi_flow->protos.tls_quic.ja4_client, sizeof(flow->ja4_client));
     memcpy(flow->s_hash, flow->ndpi_flow->protos.tls_quic.ja3_server, sizeof(flow->s_hash));
   }
 }
@@ -1091,9 +1093,9 @@ static uint8_t flow_init_bidirectional_dissection(struct ndpi_detection_module_s
   flow->detected_protocol = ndpi_detection_process_packet(dissector, flow->ndpi_flow, packet->ip_content,
                                                           packet->ip_content_len, packet->time, NULL);
   if (sync) flow_bidirectional_dissection_collect_info(dissector, flow); // Then we collect possible infos.
-  if ((flow->detected_protocol.app_protocol == NDPI_PROTOCOL_UNKNOWN) && (n_dissections == 1)) {
+  if ((flow->detected_protocol.proto.app_protocol == NDPI_PROTOCOL_UNKNOWN) && (n_dissections == 1)) {
     // Not identified and we are limited to 1, we try to guess.
-    flow->detected_protocol = ndpi_detection_giveup(dissector, flow->ndpi_flow, 1, &flow->guessed);
+    flow->detected_protocol = ndpi_detection_giveup(dissector, flow->ndpi_flow, &flow->guessed);
     if (sync) flow_bidirectional_dissection_collect_info(dissector, flow); // Collect potentially guessed infos.
     flow->detection_completed = 1; // Close it.
   }
@@ -1107,8 +1109,8 @@ static void flow_update_bidirectional_dissection(struct ndpi_detection_module_st
                                           struct nf_flow *flow, struct nf_packet *packet, uint8_t sync) {
   if (flow->detection_completed == 0) { // application not detected yet.
     // We dissect only if still unknown or known and we didn't dissect all possible information yet.
-    uint8_t still_dissect = (flow->detected_protocol.app_protocol == NDPI_PROTOCOL_UNKNOWN) ||
-                             ((flow->detected_protocol.app_protocol != NDPI_PROTOCOL_UNKNOWN)
+    uint8_t still_dissect = (flow->detected_protocol.proto.app_protocol == NDPI_PROTOCOL_UNKNOWN) ||
+                             ((flow->detected_protocol.proto.app_protocol != NDPI_PROTOCOL_UNKNOWN)
                                && ndpi_extra_dissection_possible(dissector, flow->ndpi_flow));
     if (still_dissect) { // Go for it.
       flow->detected_protocol = ndpi_detection_process_packet(dissector, flow->ndpi_flow, packet->ip_content,
@@ -1120,8 +1122,8 @@ static void flow_update_bidirectional_dissection(struct ndpi_detection_module_st
     }
 
     if (n_dissections == flow->bidirectional_packets) { // if we reach user defined limit and application is unknown
-      if (flow->detected_protocol.app_protocol == NDPI_PROTOCOL_UNKNOWN) {
-        flow->detected_protocol = ndpi_detection_giveup(dissector, flow->ndpi_flow, 1, &flow->guessed);
+      if (flow->detected_protocol.proto.app_protocol == NDPI_PROTOCOL_UNKNOWN) {
+        flow->detected_protocol = ndpi_detection_giveup(dissector, flow->ndpi_flow, &flow->guessed);
         if (sync) flow_bidirectional_dissection_collect_info(dissector, flow); // copy guessed infos if present.
       } // We reach it.
       flow->detection_completed = 1;
@@ -1650,12 +1652,12 @@ void capture_close(pcap_t * pcap_handle) {
  * dissector_init: Dissector initializer.
  */
 struct ndpi_detection_module_struct *dissector_init(struct dissector_checker *checker) {
-  // Check if headers match the ffi declarations and initialize dissector.
-  ndpi_init_prefs init_prefs = ndpi_no_prefs;
+  // Validate that header sizes match FFI expectations.
   if (checker->flow_size != ndpi_detection_get_sizeof_ndpi_flow_struct()) return NULL;
   if (checker->flow_tcp_size != ndpi_detection_get_sizeof_ndpi_flow_tcp_struct()) return NULL;
   if (checker->flow_udp_size != ndpi_detection_get_sizeof_ndpi_flow_udp_struct()) return NULL;
-  return ndpi_init_detection_module(init_prefs);
+  // Instead of using ndpi_init_prefs, pass a global context pointer (or NULL if not used)
+  return ndpi_init_detection_module(NULL);
 }
 
 /**
@@ -1722,8 +1724,8 @@ uint8_t meter_update_flow(struct nf_flow *flow, struct nf_packet *packet, uint64
  */
 void meter_expire_flow(struct nf_flow *flow, uint8_t n_dissections, struct ndpi_detection_module_struct *dissector) {
   if (n_dissections) {
-    if ((flow->detected_protocol.app_protocol == NDPI_PROTOCOL_UNKNOWN) && (flow->detection_completed == 0)) {
-      flow->detected_protocol = ndpi_detection_giveup(dissector, flow->ndpi_flow, 1, &flow->guessed);
+    if ((flow->detected_protocol.proto.app_protocol == NDPI_PROTOCOL_UNKNOWN) && (flow->detection_completed == 0)) {
+      flow->detected_protocol = ndpi_detection_giveup(dissector, flow->ndpi_flow, &flow->guessed);
     }
     flow_bidirectional_dissection_collect_info(dissector, flow);
     flow->detection_completed = 1; // IMPORTANT: This will force copy on non sync mode.

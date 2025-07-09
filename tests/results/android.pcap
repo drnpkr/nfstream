@@ -30,7 +30,7 @@ id,bidirectional_packets,bidirectional_bytes,application_name,application_catego
 28,2,174,DNS.Google,Network,0,6
 29,2,168,DNS.GoogleServices,Network,0,6
 30,20,6730,TLS.Google,Web,0,6
-31,2,148,Unknown,Unspecified,0,0
+31,2,148,Google,Web,1,7
 32,2,188,DNS.PlayStore,Network,0,6
 33,21,8026,TLS.PlayStore,SoftwareUpdate,0,6
 34,2,174,DNS.DataSaver,Network,0,6

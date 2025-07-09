@@ -24,7 +24,7 @@ id,bidirectional_packets,bidirectional_bytes,application_name,application_catego
 22,20,2200,Telegram,Chat,0,6
 23,20,2200,Telegram,Chat,0,6
 24,301,72194,Unknown,Unspecified,0,0
-25,2,212,OpenVPN,VPN,0,6
+25,2,212,Unknown,Unspecified,0,0
 26,2,186,DNS.GoogleServices,Network,0,6
 27,1,397,DHCP,Network,0,6
 28,1,243,NetBIOS.SMBv1,System,0,6

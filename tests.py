@@ -616,16 +616,16 @@ class NFStreamTest(object):
                 "www.facebook.com",
             ]
             assert int(requested_server_name) == 1
-            client_fingerprint = flow.client_fingerprint in [
+            ja3_client_fingerprint = flow.ja3_client_fingerprint in [
                 "bfcc1a3891601edb4f137ab7ab25b840",
                 "5c60e71f1b8cd40e4d40ed5b6d666e3f",
             ]
-            assert int(client_fingerprint) == 1
-            server_fingerprint = flow.server_fingerprint in [
+            assert int(ja3_client_fingerprint) == 1
+            ja3_server_fingerprint = flow.ja3_server_fingerprint in [
                 "2d1eb5817ece335c24904f516ad5da12",
                 "96681175a9547081bf3d417f1a572091",
             ]
-            assert int(server_fingerprint) == 1
+            assert int(ja3_server_fingerprint) == 1
         del fingerprint_streamer
         print(
             "{}\t: {}".format(
@@ -851,8 +851,8 @@ class NFStreamTest(object):
             assert flow.application_is_guessed == 0
             assert flow.application_confidence == 6
             assert flow.requested_server_name == "facebook.com"
-            assert flow.client_fingerprint == "bfcc1a3891601edb4f137ab7ab25b840"
-            assert flow.server_fingerprint == "2d1eb5817ece335c24904f516ad5da12"
+            assert flow.ja3_client_fingerprint == "bfcc1a3891601edb4f137ab7ab25b840"
+            assert flow.ja3_server_fingerprint == "2d1eb5817ece335c24904f516ad5da12"
             assert flow.user_agent == ""
             assert flow.content_type == ""
         print(

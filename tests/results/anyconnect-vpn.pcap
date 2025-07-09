@@ -48,7 +48,7 @@ id,bidirectional_packets,bidirectional_bytes,application_name,application_catego
 46,2,415,DNS.ApplePush,Network,0,6
 47,2,277,DNS.ApplePush,Network,0,6
 48,2,166,DNS,Network,0,6
-49,2,186,DNS,Network,0,6
+49,2,186,DNS.Apple,Network,0,6
 50,6,396,TLS,Web,1,1
 51,2,305,DNS.Outlook,Network,0,6
 52,2,132,TLS,Web,1,1

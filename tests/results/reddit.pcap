@@ -31,7 +31,7 @@ id,bidirectional_packets,bidirectional_bytes,application_name,application_catego
 29,31,9385,TLS,Web,0,6
 30,636,803265,TLS.YouTube,Media,0,6
 31,44,18545,TLS,Web,0,6
-32,27,8961,TLS,Advertisement,0,6
+32,27,8961,TLS.ADS_Analytic_Track,Advertisement,0,6
 33,42,9664,TLS.Google,Advertisement,0,6
 34,19,5664,TLS.Google,Advertisement,0,6
 35,27,9550,TLS,Web,0,6
@@ -44,7 +44,7 @@ id,bidirectional_packets,bidirectional_bytes,application_name,application_catego
 42,19,5472,TLS.Google,Web,0,6
 43,45,12223,TLS.Reddit,SocialNetwork,0,6
 44,31,8366,TLS.Google,Web,0,6
-45,33,9496,TLS.Google,Web,0,6
+45,33,9496,TLS.Google,Advertisement,0,6
 46,27,11651,TLS.Amazon,Web,0,6
 47,35,11105,TLS.Google,Advertisement,0,6
 48,104,120085,TLS.Google,Web,0,6

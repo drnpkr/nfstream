@@ -164,7 +164,7 @@ with open(
     for to_replace in cdef_to_replace(NDPI_CDEF):
         NDPI_CDEF = NDPI_CDEF.replace(to_replace, "")
 
-    NDPI_MODULE_STRUCT_CDEF = NDPI_CDEF.split("//CFFI.NDPI_MODULE_STRUCT")[1]
+    # NDPI_MODULE_STRUCT_CDEF = NDPI_CDEF.split("//CFFI.NDPI_MODULE_STRUCT")[1]
 
 with open(
     convert_path(
@@ -202,7 +202,8 @@ ENGINE_INCLUDES = (
 #include <pcap.h>
 """
 )
-ENGINE_SOURCE = ENGINE_INCLUDES + NDPI_MODULE_STRUCT_CDEF + ENGINE_CDEF
+# ENGINE_SOURCE = ENGINE_INCLUDES + NDPI_MODULE_STRUCT_CDEF + ENGINE_CDEF
+ENGINE_SOURCE = ENGINE_INCLUDES + ENGINE_CDEF
 ENGINE_APIS = """
 char * capture_get_interface(char * intf_name);
 pcap_t * capture_open(const char * pcap_file, int mode, char * child_error, int socket_buffer_size);

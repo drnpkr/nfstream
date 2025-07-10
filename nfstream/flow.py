@@ -202,8 +202,8 @@ class NFlow(object):
         "application_is_guessed",
         "application_confidence",
         "requested_server_name",
-        "ja4c_fingerprint",
-        "ja3s_fingerprint",
+        "client_fingerprint",
+        "server_fingerprint",
         "user_agent",
         "content_type",
         "_C",
@@ -329,10 +329,16 @@ class NFlow(object):
                 self.requested_server_name = ffi.string(
                     self._C.requested_server_name
                 ).decode("utf-8", errors="ignore")
-                self.ja4c_fingerprint = ffi.string(self._C.ja4c).decode(
+                # Note: nDPI 4.14+ removed JA3C, only supports JA4C for client fingerprints
+                # Server fingerprints still use JA3S (no JA4S support yet)
+                # These fields contain protocol-specific fingerprints:
+                # - DHCP: Option request list fingerprints
+                # - SSH: HASSH client/server fingerprints  
+                # - TLS: JA4C client / JA3S server fingerprints
+                self.client_fingerprint = ffi.string(self._C.ja4c).decode(
                     "utf-8", errors="ignore"
                 )
-                self.ja3s_fingerprint = ffi.string(self._C.ja3s).decode(
+                self.server_fingerprint = ffi.string(self._C.ja3s).decode(
                     "utf-8", errors="ignore"
                 )
                 self.user_agent = ffi.string(self._C.user_agent).decode(
@@ -347,9 +353,8 @@ class NFlow(object):
                 self.application_is_guessed = None
                 self.application_confidence = None
                 self.requested_server_name = None
-                # JA3C removed in nDPI 4.14 = None
-                self.ja4c_fingerprint = None
-                self.ja3s_fingerprint = None
+                self.client_fingerprint = None
+                self.server_fingerprint = None
                 self.user_agent = None
                 self.content_type = None
         if splt:  # If splt_analysis set (>0), we unpack the arrays structures.
@@ -529,10 +534,16 @@ class NFlow(object):
                 self.requested_server_name = ffi.string(
                     self._C.requested_server_name
                 ).decode("utf-8", errors="ignore")
-                self.ja4c_fingerprint = ffi.string(self._C.ja4c).decode(
+                # Note: nDPI 4.14+ removed JA3C, only supports JA4C for client fingerprints
+                # Server fingerprints still use JA3S (no JA4S support yet)
+                # These fields contain protocol-specific fingerprints:
+                # - DHCP: Option request list fingerprints
+                # - SSH: HASSH client/server fingerprints  
+                # - TLS: JA4C client / JA3S server fingerprints
+                self.client_fingerprint = ffi.string(self._C.ja4c).decode(
                     "utf-8", errors="ignore"
                 )
-                self.ja3s_fingerprint = ffi.string(self._C.ja3s).decode(
+                self.server_fingerprint = ffi.string(self._C.ja3s).decode(
                     "utf-8", errors="ignore"
                 )
                 self.user_agent = ffi.string(self._C.user_agent).decode(

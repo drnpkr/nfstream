@@ -161,8 +161,8 @@ typedef struct nf_flow {
   char application_name[40];
   char category_name[40];
   char requested_server_name[80];
-  char ja4c[48];
-  char ja3s[48];
+  char ja4_client[48];
+  char ja3_server[48];
   char content_type[64];
   char user_agent[256];
   struct ndpi_flow_struct *ndpi_flow;
@@ -892,7 +892,7 @@ static void flow_bidirectional_dissection_collect_info(struct ndpi_detection_mod
   memcpy(flow->requested_server_name, flow->ndpi_flow->host_server_name, sizeof(flow->requested_server_name));
   // DHCP: We put DHCP fingerprint in client side: this can be helpful for device identification approaches.
   if (flow_is_ndpi_proto(flow, NDPI_PROTOCOL_DHCP)) {
-    memcpy(flow->ja4c, flow->ndpi_flow->protos.dhcp.fingerprint, sizeof(flow->ja4c));
+    memcpy(flow->ja4_client, flow->ndpi_flow->protos.dhcp.fingerprint, sizeof(flow->ja4_client));
   }
   // HTTP: UserAgent and ContentType. With server name this is sufficient. (at least for now)
   else if (flow_is_ndpi_proto(flow, NDPI_PROTOCOL_HTTP)) {
@@ -901,8 +901,8 @@ static void flow_bidirectional_dissection_collect_info(struct ndpi_detection_mod
   // SSH: https://github.com/salesforce/hassh
   //      We extract both client and server fingerprints hassh fingerprints for SSH.
   } else if (flow_is_ndpi_proto(flow, NDPI_PROTOCOL_SSH)) {
-    memcpy(flow->ja4c, flow->ndpi_flow->protos.ssh.hassh_client, sizeof(flow->ja4c));
-    memcpy(flow->ja3s, flow->ndpi_flow->protos.ssh.hassh_server, sizeof(flow->ja3s));
+    memcpy(flow->ja4_client, flow->ndpi_flow->protos.ssh.hassh_client, sizeof(flow->ja4_client));
+    memcpy(flow->ja3_server, flow->ndpi_flow->protos.ssh.hassh_server, sizeof(flow->ja3_server));
   }
   // TLS: We populate requested server name with the server name identifier extracted in client hello.
   //      Then we add JA4C/JA3S fingerprints for both client and server: 
@@ -915,8 +915,8 @@ static void flow_bidirectional_dissection_collect_info(struct ndpi_detection_mod
            flow_is_ndpi_proto(flow, NDPI_PROTOCOL_MAIL_POPS) || flow_is_ndpi_proto(flow, NDPI_PROTOCOL_QUIC)) {
     memcpy(flow->requested_server_name, flow->ndpi_flow->host_server_name, sizeof(flow->requested_server_name));
     ndpi_snprintf(flow->user_agent, sizeof(flow->user_agent), "%s", (flow->ndpi_flow->http.user_agent ? flow->ndpi_flow->http.user_agent : ""));
-    memcpy(flow->ja4c, flow->ndpi_flow->protos.tls_quic.ja4_client, sizeof(flow->ja4c));
-    memcpy(flow->ja3s, flow->ndpi_flow->protos.tls_quic.ja3_server, sizeof(flow->ja3s));
+    memcpy(flow->ja4_client, flow->ndpi_flow->protos.tls_quic.ja4_client, sizeof(flow->ja4_client));
+    memcpy(flow->ja3_server, flow->ndpi_flow->protos.tls_quic.ja3_server, sizeof(flow->ja3_server));
   }
 }
 

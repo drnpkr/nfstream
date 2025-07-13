@@ -335,10 +335,10 @@ class NFlow(object):
                 # - DHCP: Option request list fingerprints
                 # - SSH: HASSH client/server fingerprints  
                 # - TLS: JA4C client / JA3S server fingerprints
-                self.client_fingerprint = ffi.string(self._C.ja4c).decode(
+                self.client_fingerprint = ffi.string(self._C.ja4_client).decode(
                     "utf-8", errors="ignore"
                 )
-                self.server_fingerprint = ffi.string(self._C.ja3s).decode(
+                self.server_fingerprint = ffi.string(self._C.ja3_server).decode(
                     "utf-8", errors="ignore"
                 )
                 self.user_agent = ffi.string(self._C.user_agent).decode(
@@ -540,10 +540,10 @@ class NFlow(object):
                 # - DHCP: Option request list fingerprints
                 # - SSH: HASSH client/server fingerprints  
                 # - TLS: JA4C client / JA3S server fingerprints
-                self.client_fingerprint = ffi.string(self._C.ja4c).decode(
+                self.client_fingerprint = ffi.string(self._C.ja4_client).decode(
                     "utf-8", errors="ignore"
                 )
-                self.server_fingerprint = ffi.string(self._C.ja3s).decode(
+                self.server_fingerprint = ffi.string(self._C.ja3_server).decode(
                     "utf-8", errors="ignore"
                 )
                 self.user_agent = ffi.string(self._C.user_agent).decode(
